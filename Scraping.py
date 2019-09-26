@@ -6,5 +6,5 @@ import json
 # sudo apt-get install jp2a 
 thisweek = requests.get('https://vote.fredagskakan.se/thisweek').json()
 url = thisweek["URL"]
-os.system("jp2a --colors --chars= ' ...ooxx@@'" + url)
+os.system("jp2a --colors " + url)
 print ("Veckans kaka är",thisweek["Kaka"])
