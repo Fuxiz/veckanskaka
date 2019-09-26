@@ -1,10 +1,10 @@
+import os
 import requests
-import urllib.request
-import time
-from bs4 import BeautifulSoup
-
-url = "http://fredagskakan.se/"
-response = requests.get(url)
-soup = BeautifulSoup(response.text, "html.parser")
-kaka = str(soup.find('b')).replace ("<b>", "",).replace("</b>", "")
-print ("Veckans kaka är", kaka + "!!")
+import json
+# pip3 install requests 
+# pip install jsonlib
+# sudo apt-get install jp2a 
+thisweek = requests.get('https://vote.fredagskakan.se/thisweek').json()
+url = thisweek["URL"]
+os.system("jp2a --colors --chars= ' ...ooxx@@'" + url)
+print ("Veckans kaka är",thisweek["Kaka"])
