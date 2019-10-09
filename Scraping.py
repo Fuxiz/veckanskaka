@@ -7,4 +7,4 @@ import json
 thisweek = requests.get('https://vote.fredagskakan.se/thisweek').json()
 url = thisweek["URL"]
 os.system("jp2a --colors " + url)
-print ("Veckans kaka är",thisweek["Kaka"])
+print ("Veckans kaka är",str(thisweek["Kaka"]))
