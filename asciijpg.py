@@ -1,36 +1,41 @@
-import sys
-from PIL import Image
+from PIL import Image,ImageDraw,ImageFont
+import math
 
-# pass the image as command line argument
-image_path = sys.argv[1]
-img = Image.open(image_path)
+image = Image.open("morotskaka.jpg")
+scaleFac = 0.8
+charWidth = 10
+charHeight = 18
+w,h = image.size
+image = image.resize((int(scaleFac*w),int(scaleFac*h*(charWidth/charHeight))),Image.NEAREST)
+w,h = image.size
+pixels = image.load()
+outputImage = Image.new('RGB',(charWidth*w,charHeight*h),color=(0,0,0))
+draw = ImageDraw.Draw(outputImage)
+font = ImageFont.truetype('/usr/share/fonts/truetype/NotoMono-Regular.ttf',15)
+outputImage = Image.new('RGB',(charWidth*w,charHeight*h),color=(0,0,0))
+print(outputImage)
+draw = ImageDraw.Draw(outputImage)
 
-# resize the image
-width, height = img.size
-aspect_ratio = height/width
-new_width = 120
-new_height = aspect_ratio * new_width * 0.55
-img = img.resize((new_width, int(new_height)))
-# new size of image
-# print(img.size)
 
-# convert image to greyscale format
-img = img.convert('P')
+def getSomeChar(h):
+    chars  = "$@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/\|()1{}[]?-_+~<>i!lI;:,\"^`'. "[::-1]
+    charArr = list(chars)
+    l = len(charArr)
+    mul = l/256
+    return charArr[math.floor(h*mul)]
 
-pixels = img.getdata()
+for i in range(h):
+        for j in range(w):
+            r,g,b = pixels[j,i]
+            grey = int((r/3+g/3+b/3))
+            pixels[j,i] = (grey,grey,grey)
+            #draw = [getSomeChar(grey)[index:index + charWidth] for index in range(0, charWidth, charHeight)]
+            #draw = (getSomeChar(grey))
+            #print(draw)
 
-# replace each pixel with a character from array
-chars = ["B","S","#","&","@","$","%","*","!",":","."]
-new_pixels = [chars[pixel//25] for pixel in pixels]
+new_pixels = getSomeChar(grey)
 new_pixels = ''.join(new_pixels)
-
-# split string of chars into multiple strings of length equal to new width and create a list
 new_pixels_count = len(new_pixels)
-ascii_image = [new_pixels[index:index + new_width] for index in range(0, new_pixels_count, new_width)]
+ascii_image = [new_pixels[index:index + charWidth] for index in range(0, new_pixels_count, charWidth)]
 ascii_image = "\n".join(ascii_image)
 print(ascii_image)
-
-# write to a text file.
-with open("ascii_image.txt", "w") as f:
- f.write(ascii_image)
-
