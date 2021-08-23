@@ -5,7 +5,7 @@ import json
 # pip3 install requests 
 # pip install jsonlib
 # sudo apt-get install jp2a 
-thisweek = requests.get('https://vote.fredagskakan.se/thisweek').json()
+thisweek = requests.get('https://api.fredagskakan.se/thisweek').json()
 url = thisweek["URL"]
 urllib.request.urlretrieve(url, "/tmp/veckanskaka.jpg")
 os.system("jp2a --colors /tmp/veckanskaka.jpg")
